@@ -72,19 +72,13 @@ start:
 		exit 0
 	found:
 		name_offset equ 1Eh
-		lea si, dta_buff + name_offset
-		loop_0:
-			lodsb
-			cmp al, 0
-			je loop_0_end
-				mov ah, 06h
-				mov dl, al
-				int 21h
-			jmp loop_0
-		loop_0_end:
-		lea dx, new_line
-		mov ah, 09h
-		int 21h
+		lea di, dta_buff + name_offset
+		xor al, al
+		mov cx, -1
+		repne scasb
+		mov [di - 1], '$'
+		lea dx, dta_buff + name_offset
+		call println
 
 		mov ah, 4Fh
 		int 21h
